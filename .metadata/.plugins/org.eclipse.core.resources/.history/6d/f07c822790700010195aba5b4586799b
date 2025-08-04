@@ -1,0 +1,34 @@
+/*
+ * stm32f446xx_Timer_driver.h
+ *
+ *  Created on: Aug 3, 2025
+ *      Author: bright
+ */
+
+#ifndef DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_
+#define DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_
+
+
+#include "../../Driver/Inc/stm32f446xx.h"
+
+
+typedef struct{
+	uint8_t TIM_DutyCycle;
+	uint8_t TIM_Prescaler;
+	uint8_t TIM_CounterDirection; // Upwards or Downwards
+	uint8_t TIM_Channel; // Capture Mode or Compare Mode
+	uint8_t TIM_Mode;
+	uint8_t TIM_Period; // in ms
+	uint8_t TIM_DutyCycle; // in Percent
+
+}Timer_PinConfig_t;
+
+typedef struct{
+	TIM_RegDef_t *pTIMx; /*Pointer to hold the base address of the TIM peripheral*/
+	Timer_PinConfig_t TIMx_PinConfig;
+}Timer_Handle_t;
+
+void TIM_Init(Timer_Handle_t *pTIMHandle);
+void TIM_PeriClockControl(Timer_RegDef_t *pTIMx, uint8_t ENorDI);
+
+#endif /* DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_ */

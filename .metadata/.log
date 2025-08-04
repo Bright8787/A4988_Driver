@@ -1,0 +1,72 @@
+!SESSION 2025-08-02 18:30:30.847 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-08-02 18:31:26.982
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-08-02 18:31:26.982
+!MESSAGE Log4j2 initialized with config file /home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-08-02 18:31:29.925
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-08-02 18:32:49.259
+!MESSAGE Indexed 'A4988_Driver' (3 sources, 53 headers) in 0.748 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-08-02 18:33:52.776
+!MESSAGE Indexed 'A4988_Driver' (3 sources, 53 headers) in 0.193 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-08-02 18:34:33.900
+!MESSAGE Indexed 'A4988_Driver' (3 sources, 53 headers) in 0.161 sec: 1,954 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-08-02 18:38:24.094
+!MESSAGE Indexed 'A4988_Driver' (3 sources, 53 headers) in 0.088 sec: 1,954 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)
+!SESSION 2025-08-02 19:32:09.484 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-08-02 19:32:25.265
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-08-02 19:32:25.265
+!MESSAGE Log4j2 initialized with config file /home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-08-02 19:32:29.368
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2025-08-03 17:21:26.982 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-08-03 17:21:35.991
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-08-03 17:21:35.992
+!MESSAGE Log4j2 initialized with config file /home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-08-03 17:21:41.931
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2025-08-04 13:13:05.693 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-08-04 13:13:14.743
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-08-04 13:13:14.744
+!MESSAGE Log4j2 initialized with config file /home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-08-04 13:13:20.477
+!MESSAGE Started RMI Server, listening on port 41337

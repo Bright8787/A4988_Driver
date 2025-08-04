@@ -1,0 +1,3 @@
+buildConsole/keepLog=true
+buildConsole/logLocation=/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/.metadata/.plugins/org.eclipse.cdt.ui/A4988_Driver.build.log
+eclipse.preferences.version=1

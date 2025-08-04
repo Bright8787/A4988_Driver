@@ -1,0 +1,36 @@
+/*
+ * StepperMotor_A4988.h
+ *
+ *  Created on: Aug 2, 2025
+ *      Author: bright
+ */
+
+#ifndef BSP_STEPPERMOTOR_A4988_H_
+#define BSP_STEPPERMOTOR_A4988_H_
+
+
+#include "../Driver/Inc/stm32f446xx.h"
+
+#define HIGH 1
+#define LOW 0
+
+#define FULLSTEP 0
+#define HALFSTEP 1
+#define QUARTERSTEP 2
+#define EIGTHSTEP 3
+#define SIXTEENTHSTEP 7
+
+/*Microstepping*/
+typedef struct microStepping{
+	uint8_t MS[3];
+
+};
+
+/*Stepper object*/
+typedef struct stepperMotor{
+    uint32_t steps;
+    uint8_t dir;
+    microStepping resolution;
+};
+
+#endif /* BSP_STEPPERMOTOR_A4988_H_ */
