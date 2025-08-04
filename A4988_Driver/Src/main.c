@@ -17,13 +17,44 @@
  */
 
 #include <stdint.h>
-
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+#include "../Driver/Inc/stm32f446xx.h"
+#include "stddef.h"
+#include "string.h"
 
 int main(void)
 {
+
+    GPIO_Handle_t STEP;
+    TIM_Handle_t PWM2;
+
+	memset(&STEP,0,sizeof(STEP));
+	memset(&PWM2,0,sizeof(PWM2));
+	/*Always initiate clock first before data line*/
+	// PA5 ALternate 1 TIM2_CH1
+	STEP.pGPIOx = pGPIOA;
+	STEP.GPIO_PinConfig.GPIO_PinMode= GPIO_MODE_ALTF;
+	STEP.GPIO_PinConfig.GPIO_PinAltFunMode = 2;
+	STEP.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP;
+	STEP.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
+	STEP.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	STEP.GPIO_PinConfig.GPIO_PinNumber = 1;
+
+	GPIO_Init(&STEP);
+
+	PWM2.pTIMx = pTIM5;
+	PWM2.TIMx_PinConfig.TIM_Prescaler = 16;
+	PWM2.TIMx_PinConfig.TIM_CountDir = UPWARDS;
+	PWM2.TIMx_PinConfig.TIM_Channel = TIMx_CH2;
+	PWM2.TIMx_PinConfig.TIM_Mode = TIMx_MODE_COMPARE;
+	PWM2.TIMx_PinConfig.TIM_CMP_Mode = TIMx_COMPARE_MODE_PWM1;
+	PWM2.TIMx_PinConfig.TIM_ARR = 1000;
+	PWM2.TIMx_PinConfig.TIM_CCR = 200;
+
+	TIM_Init(&PWM2);
+
     /* Loop forever */
-	for(;;);
+	for(;;){
+
+
+	}
 }

@@ -1,3 +1,6 @@
+"./Bsp/StepperMotor_A4988.o"
+"./Driver/src/stm32f446xx_GPIO_driver.o"
+"./Driver/src/stm32f446xx_Timer_driver.o"
 "./Src/main.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"

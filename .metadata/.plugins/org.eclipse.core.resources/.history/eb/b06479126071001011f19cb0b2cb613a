@@ -1,0 +1,73 @@
+/*
+ * stm32f446xx_Timer_driver.h
+ *
+ *  Created on: Aug 3, 2025
+ *      Author: bright
+ */
+
+#ifndef DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_
+#define DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_
+
+
+#include "../../Driver/Inc/stm32f446xx.h"
+
+#define HIGH 1
+#define LOW 0
+
+
+#define TIMx_CR1_DIR_UPWARDS 1
+#define TIMx_CR1_DIR_DOWNWARDS 0
+
+
+#define TIMx_CH1 1
+#define TIMx_CH2 2
+#define TIMx_CH3 3
+#define TIMx_CH4 4
+
+#define TIMx_MODE_COMPARE 0
+#define TIMx_MODE_CAPTURE 1
+
+#define TIMx_COMPARE_MODE_FROZEN 0
+#define TIMx_COMPARE_MODE_SETACTIVE 1
+#define TIMx_COMPARE_MODE_SETINACTIVE 2
+#define TIMx_COMPARE_MODE_TOGGLE 3
+#define TIMx_COMPARE_MODE_FORCEACTIVE 4
+#define TIMx_COMPARE_MODE_FORCEINACTIVE 5
+#define TIMx_COMPARE_MODE_PWM1 6
+#define TIMx_COMPARE_MODE_PWM2 7
+
+#define TIM_CR1_DIR_POS 4
+#define TIM_CR1_ARPE_POS 7
+#define TIM_CR1_CEN_POS 0
+#define TIM_CCMR1_OC1M_POS 4
+#define TIM_CCMR1_OC2M_POS 12
+#define TIM_CCMR1_OC1PE_POS 3
+#define TIM_CCMR1_OC2PE_POS 11
+
+#define TIM_CCMR2_OC3M_POS 4
+#define TIM_CCMR2_OC4M_POS 12
+#define TIM_CCMR2_OC1PE_POS 3
+#define TIM_CCMR2_OC2PE_POS 11
+
+typedef struct{
+	uint8_t TIM_Prescaler;
+	uint32_t TIM_ARR; // Autor reload register
+	uint32_t TIM_CCR; // Compare register
+	uint8_t TIM_CountDir; // Upwards or Downwards
+	uint8_t TIM_Channel;
+	uint8_t TIM_Mode; // Capture Mode or Compare Mode
+	uint8_t TIM_CMP_Mode; // Mode in Compare Mode
+	uint8_t TIM_CPT_Mode; // Mode in Capture Mode
+
+}TIM_PinConfig_t;
+
+typedef struct{
+	TIM_RegDef_t *pTIMx; /*Pointer to hold the base address of the TIM peripheral*/
+	TIM_PinConfig_t TIMx_PinConfig;
+}TIM_Handle_t;
+
+/*TIMx API Supported */
+void TIM_Init(TIM_Handle_t *pTIMHandle);
+void TIM_PeriClockControl(TIM_RegDef_t *pTIMx, uint8_t ENorDI);
+
+#endif /* DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_ */

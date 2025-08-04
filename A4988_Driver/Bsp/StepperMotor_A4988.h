@@ -32,7 +32,7 @@ typedef struct A4988_config_t{
 };
 
 
-void A4988_init(A4988_config_t *A4988_config);
+//void A4988_init(A4988_config_t *A4988_config);
 void A4988_move_Step(uint32_t steps,uint32_t dir);
 void A4988_move_Degree(uint32_t degree,uint32_t dir);
 #endif /* BSP_STEPPERMOTOR_A4988_H_ */
