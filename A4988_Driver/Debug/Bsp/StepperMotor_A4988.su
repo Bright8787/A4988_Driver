@@ -1,0 +1,4 @@
+../Bsp/StepperMotor_A4988.c:18:6:A4988_init	16	static
+../Bsp/StepperMotor_A4988.c:28:13:A4988_GPIO_config	16	static
+../Bsp/StepperMotor_A4988.c:57:13:A4988_TIM_config	16	static
+../Bsp/StepperMotor_A4988.c:77:6:A4988_move_Step	16	static

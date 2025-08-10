@@ -40,6 +40,8 @@
 #define GPIO_PIN_SET ENABLE
 #define GPIO_PIN_RESET  DISABLE
 #define HSI_CLK 16000000
+#define FLAG_RESET 0
+#define FLAG_SET 1
 
 /*Peripherals*/
 #define PERIPH_BASEADDR 0x40000000U
@@ -96,6 +98,11 @@
 #define IRQ_NO_SPI2 36
 #define IRQ_NO_SPI3 51
 #define IRQ_NO_SPI4 84
+
+#define IRQ_NO_TIM2 28
+#define IRQ_NO_TIM3 29
+#define IRQ_NO_TIM4 30
+#define IRQ_NO_TIM5 50
 
 /*SPI Register Bit Position*/
 #define SPI_CR1_CPHA 0
@@ -160,8 +167,37 @@
 #define I2C_ACK_ENABLE 1
 #define I2C_ACK_DISABLE 0
 
-#define FLAG_RESET 0
-#define FLAG_SET 1
+
+/*Timer Register Bit Position*/
+#define TIM_CR1_DIR_POS 4
+#define TIM_CR1_ARPE_POS 7
+#define TIM_CR1_CEN_POS 0
+#define TIM_CCMR1_OC1M_POS 4
+#define TIM_CCMR1_OC2M_POS 12
+#define TIM_CCMR1_OC1PE_POS 3
+#define TIM_CCMR1_OC2PE_POS 11
+
+#define TIM_CCMR2_OC3M_POS 4
+#define TIM_CCMR2_OC4M_POS 12
+#define TIM_CCMR2_OC3PE_POS 3
+#define TIM_CCMR2_OC4PE_POS 11
+
+#define TIM_DIER_UIE_POS 0
+
+
+/*TIM2 to 5*/
+
+#define TIM_SR_UIF_POS 0
+#define TIM_SR_CC1IF_POS 1
+#define TIM_SR_CC2IF_POS 2
+#define TIM_SR_CC3IF_POS 3
+#define TIM_SR_CC4IF_POS 4
+#define TIM_SR_TIF_POS 6
+#define TIM_SR_CC1OF_POS 9
+#define TIM_SR_CC2OF_POS 10
+#define TIM_SR_CC3OF_POS 11
+#define TIM_SR_CC4OF_POS 12
+
 
 /*GPIO Object*/
 typedef struct {

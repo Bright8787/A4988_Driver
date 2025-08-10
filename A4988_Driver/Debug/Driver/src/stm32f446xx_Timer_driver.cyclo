@@ -1,3 +1,5 @@
 ../Driver/src/stm32f446xx_Timer_driver.c:11:6:TIM_Init	3
 ../Driver/src/stm32f446xx_Timer_driver.c:37:6:TIM_PeriClockControl	10
 ../Driver/src/stm32f446xx_Timer_driver.c:73:6:TIM_SetCompareModeChannel	5
+../Driver/src/stm32f446xx_Timer_driver.c:123:6:TIM_InterruptEnable	2
+../Driver/src/stm32f446xx_Timer_driver.c:132:6:TIM_IRQInterruptConfig	12

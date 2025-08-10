@@ -36,18 +36,17 @@
 #define TIMx_COMPARE_MODE_PWM1 6
 #define TIMx_COMPARE_MODE_PWM2 7
 
-#define TIM_CR1_DIR_POS 4
-#define TIM_CR1_ARPE_POS 7
-#define TIM_CR1_CEN_POS 0
-#define TIM_CCMR1_OC1M_POS 4
-#define TIM_CCMR1_OC2M_POS 12
-#define TIM_CCMR1_OC1PE_POS 3
-#define TIM_CCMR1_OC2PE_POS 11
 
-#define TIM_CCMR2_OC3M_POS 4
-#define TIM_CCMR2_OC4M_POS 12
-#define TIM_CCMR2_OC3PE_POS 3
-#define TIM_CCMR2_OC4PE_POS 11
+#define TIMx_EV_UIF 0
+#define TIMx_EV_CC1IF 1
+#define TIMx_EV_CC2IF 2
+#define TIMx_EV_CC3IF 3
+#define TIMx_EV_CC4IF 4
+#define TIMx_EV_TIF 5
+#define TIMx_ER_CC4OF 6
+#define TIMx_ER_CC2OF 7
+#define TIMx_ER_CC3OF 8
+#define TIMx_ER_CC4OF 9
 
 typedef struct{
 	uint32_t TIM_Prescaler;
@@ -57,7 +56,6 @@ typedef struct{
 	uint8_t TIM_Channel;
 	uint8_t TIM_Mode; // Capture Mode or Compare Mode
 	uint8_t TIM_CMP_Mode; // Mode in Compare Mode
-	uint8_t TIM_CPT_Mode; // Mode in Capture Mode
 
 }TIM_PinConfig_t;
 
@@ -69,5 +67,12 @@ typedef struct{
 /*TIMx API Supported */
 void TIM_Init(TIM_Handle_t *pTIMHandle);
 void TIM_PeriClockControl(TIM_RegDef_t *pTIMx, uint8_t ENorDI);
+void TIM_IRQInterruptConfig(uint8_t IRQNumber, uint8_t ENorDI);
+void TIM_InterruptEnable(TIM_Handle_t *pTIMHandle,uint8_t ENorDI);
+/*Event Handling*/
+void TIMx_EV_IRQHandling(TIM_Handle_t *pTIMHandle);
+/*Error Handling*/
+void TIMx_ER_IRQHandling(TIM_Handle_t *pTIMHandle);
+void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv);
 
 #endif /* DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_ */
