@@ -1,4 +1,10 @@
-../Bsp/StepperMotor_A4988.c:18:6:A4988_init	1
-../Bsp/StepperMotor_A4988.c:28:13:A4988_GPIO_config	1
-../Bsp/StepperMotor_A4988.c:57:13:A4988_TIM_config	1
-../Bsp/StepperMotor_A4988.c:77:6:A4988_move_Step	1
+../Bsp/StepperMotor_A4988.c:21:6:A4988_init	1
+../Bsp/StepperMotor_A4988.c:30:13:A4988_GPIO_Config	1
+../Bsp/StepperMotor_A4988.c:59:13:A4988_TIM_Config	1
+../Bsp/StepperMotor_A4988.c:79:13:A4988_TIM_Init	1
+../Bsp/StepperMotor_A4988.c:94:6:A4988_move_Step	1
+../Bsp/StepperMotor_A4988.c:105:6:TIM2_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:110:6:TIM3_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:115:6:TIM4_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:120:6:TIM5_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:125:6:TIM_ApplicationEventCallback	1

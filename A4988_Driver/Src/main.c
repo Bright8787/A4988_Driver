@@ -64,17 +64,17 @@ int main(void)
 	}
 }
 
-void TIM2_IRQHandler(void){
-    // 1. Clear interrupt flag
-	PWM2.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);  // Clear update interrupt flag
-    // 2. Update CCR register to change pulse width (duty cycle) or timing
-	if(status == 1) pulse += 1;
-	else  pulse -= 1;
-
-    if (pulse >= PWM2.pTIMx->ARR){
-
-    	status *= -1;
-    }
-    PWM2.pTIMx->CCR1 = pulse;
-
-}
+//void TIM2_IRQHandler(void){
+//    // 1. Clear interrupt flag
+//	PWM2.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);  // Clear update interrupt flag
+//    // 2. Update CCR register to change pulse width (duty cycle) or timing
+//	if(status == 1) pulse += 1;
+//	else  pulse -= 1;
+//
+//    if (pulse >= PWM2.pTIMx->ARR){
+//
+//    	status *= -1;
+//    }
+//    PWM2.pTIMx->CCR1 = pulse;
+//
+//}

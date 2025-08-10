@@ -13,7 +13,7 @@
 #define MAX_TIMERS 4
 static void A4988_GPIO_Config(A4988_config_t *A4988_config);
 static void A4988_TIM_Config(A4988_config_t *A4988_config);
-static void A4988_TIM_Init(A4988_config_t *A4988_config);
+static void A4988_TIM_Init();
 
 TIM_Handle_t TIM_handles[MAX_TIMERS];
 
@@ -22,8 +22,8 @@ void A4988_init(A4988_config_t *A4988_config){
 
 	// Set address of each timer in TIM_handles array
 	A4988_TIM_Init();
-	A4988_GPIO_config(A4988_config);
-	A4988_TIM_config(A4988_config);
+	A4988_GPIO_Config(A4988_config);
+	A4988_TIM_Config(A4988_config);
 
 }
 
@@ -79,16 +79,16 @@ static void A4988_TIM_Config(A4988_config_t *A4988_config){
 static void A4988_TIM_Init(){
 
     memset(&TIM_handles[0], 0, sizeof(TIM_Handle_t));
-    TIM_handles[0].pTIMx = TIM2;
+    TIM_handles[0].pTIMx = pTIM2;
 
     memset(&TIM_handles[1], 0, sizeof(TIM_Handle_t));
-    TIM_handles[1].pTIMx = TIM3;
+    TIM_handles[1].pTIMx = pTIM3;
 
     memset(&TIM_handles[2], 0, sizeof(TIM_Handle_t));
-    TIM_handles[2].pTIMx = TIM4;
+    TIM_handles[2].pTIMx = pTIM4;
 
     memset(&TIM_handles[3], 0, sizeof(TIM_Handle_t));
-    TIM_handles[3].pTIMx = TIM5;
+    TIM_handles[3].pTIMx = pTIM5;
 
 }
 void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle){
@@ -120,6 +120,10 @@ void TIM4_IRQHandler(void){
 void TIM5_IRQHandler(void){
 
 	TIMx_EV_IRQHandling(&TIM_handles[3]);
+}
+
+void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv){
+
 }
 
 

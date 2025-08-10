@@ -43,7 +43,7 @@
 #define TIMx_EV_CC3IF 3
 #define TIMx_EV_CC4IF 4
 #define TIMx_EV_TIF 5
-#define TIMx_ER_CC4OF 6
+#define TIMx_ER_CC1OF 6
 #define TIMx_ER_CC2OF 7
 #define TIMx_ER_CC3OF 8
 #define TIMx_ER_CC4OF 9
@@ -71,8 +71,7 @@ void TIM_IRQInterruptConfig(uint8_t IRQNumber, uint8_t ENorDI);
 void TIM_InterruptEnable(TIM_Handle_t *pTIMHandle,uint8_t ENorDI);
 /*Event Handling*/
 void TIMx_EV_IRQHandling(TIM_Handle_t *pTIMHandle);
-/*Error Handling*/
-void TIMx_ER_IRQHandling(TIM_Handle_t *pTIMHandle);
+
 void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv);
 
 #endif /* DRIVER_INC_STM32F446XX_TIMER_DRIVER_H_ */
