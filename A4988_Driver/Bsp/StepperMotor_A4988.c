@@ -15,6 +15,12 @@ static void A4988_GPIO_Config(A4988_config_t *A4988_config);
 static void A4988_TIM_Config(A4988_config_t *A4988_config);
 static void A4988_TIM_Init();
 
+static uint32_t arr = 1;
+static uint32_t counter = 1;
+static uint8_t status = 1;
+static uint8_t pulse = 1;
+static uint32_t ccr = 1;
+static uint32_t step = 1;
 TIM_Handle_t TIM_handles[MAX_TIMERS];
 
 
@@ -34,12 +40,12 @@ static void A4988_GPIO_Config(A4988_config_t *A4988_config){
 	memset(&dir,0,sizeof(dir));
 	memset(&step,0,sizeof(step));
 
-
 	//Set up Step Port
 	step.pGPIOx = A4988_config->step_port;
 	step.GPIO_PinConfig.GPIO_PinNumber = A4988_config->step_pin;
-	step.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
+	step.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTF;
 	step.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	step.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
 	step.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP ; // PP for normal usage
 	step.GPIO_PinConfig.GPIO_PinAltFunMode = A4988_config->step_alt_mode; // No Alternate Funciton is used
 	GPIO_Init(&step);
@@ -50,6 +56,7 @@ static void A4988_GPIO_Config(A4988_config_t *A4988_config){
 	dir.GPIO_PinConfig.GPIO_PinNumber = A4988_config->dir_pin;
 	dir.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
 	dir.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	dir.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
 	dir.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP ; // PP for normal usage
 	dir.GPIO_PinConfig.GPIO_PinAltFunMode = A4988_config->dir_alt_mode; // No Alternate Funciton is used
 	GPIO_Init(&dir);
@@ -61,14 +68,14 @@ static void A4988_TIM_Config(A4988_config_t *A4988_config){
 	TIM_Handle_t PWMx;
 	memset(&PWMx,0,sizeof(PWMx));
 
-	PWMx.pTIMx = A4988_config->step_timer;
+	PWMx.pTIMx = A4988_config->step_timer_port;
 	PWMx.TIMx_PinConfig.TIM_Prescaler = 4;
 	PWMx.TIMx_PinConfig.TIM_CountDir = UPWARDS;
 	PWMx.TIMx_PinConfig.TIM_Channel = A4988_config->step_channel;;
 	PWMx.TIMx_PinConfig.TIM_Mode = TIMx_MODE_COMPARE;
 	PWMx.TIMx_PinConfig.TIM_CMP_Mode = TIMx_COMPARE_MODE_PWM1;
 	PWMx.TIMx_PinConfig.TIM_ARR = 1000; // 1 Period = 1/4MHz = 0.25 microSecs -> 1000 * 0.25 microSecs = 250 microSecs
-	PWMx.TIMx_PinConfig.TIM_CCR = PWMx.TIMx_PinConfig.TIM_ARR/2; // Duty Cycle 50%
+	PWMx.TIMx_PinConfig.TIM_CCR = 500; // Duty Cycle 50%
 
 	TIM_Init(&PWMx);
 	TIM_InterruptEnable(&PWMx,ENABLE);
@@ -93,12 +100,18 @@ static void A4988_TIM_Init(){
 }
 void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle){
 	// Enable Counter and ISR
+	counter = 0;
+	step = steps;
+	arr = 1000;
+	ccr = 500;
 	pTIMHandle.pTIMx->CR1  |= (1 << TIM_CR1_CEN_POS);
-	TIM_InterruptEnable(&pTIMHandle,ENABLE);
+
+	while(counter < steps);
+
 
 	// Disable Counter
 	pTIMHandle.pTIMx->CR1  &= ~(1 << TIM_CR1_CEN_POS);
-	TIM_InterruptEnable(&pTIMHandle,DISABLE);
+
 
 }
 
@@ -123,7 +136,38 @@ void TIM5_IRQHandler(void){
 }
 
 void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv){
+	if(AppEv == TIMx_EV_UIF){
+//		Update the frequency of toggling
+//		Update CCR register to change pulse width (duty cycle) or timing
+		counter++;
+		if(status == 1){
+			arr -= 10;
+			// Has to come up with formula to increase or decrease arr
+		}
+		else{
+			arr += 10;
+		}
 
+		if (counter >= step){ // High frequency pulse
+		    	status *= -1;
+		}
+
+		pTIMHandle->pTIMx->ARR = arr;
+		// Make sure duty cycle is still 50 percent
+		pTIMHandle->pTIMx->CCR1 = arr/2;
+
+// Test
+//			if(status == 1) pulse += 1;
+//			else  pulse -= 1;
+//
+//		    if (pulse >= pTIMHandle->pTIMx->ARR){
+//
+//		    	status *= -1;
+//		    }
+//		    pTIMHandle->pTIMx->CCR1 = pulse;
+
+
+	}
 }
 
 

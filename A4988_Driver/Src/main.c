@@ -18,63 +18,55 @@
 
 #include <stdint.h>
 #include "../Driver/Inc/stm32f446xx.h"
+#include "../Bsp/StepperMotor_A4988.h"
 #include "stddef.h"
 #include "string.h"
 
-GPIO_Handle_t STEP;
-TIM_Handle_t PWM2;
-static uint32_t pulse = 1;
-static uint8_t status = 1;
+
+
+TIM_Handle_t timer;
+
 // 1 = UP and 0 = DOWN
 int main(void)
 {
 
+	timer.pTIMx = pTIM2;
+	A4988_config_t stepper_1;
+	memset(&stepper_1,0,sizeof(stepper_1));
 
-
-	memset(&STEP,0,sizeof(STEP));
-	memset(&PWM2,0,sizeof(PWM2));
 	/*Always initiate clock first before data line*/
-	// PA5 ALternate 1 TIM2_CH1
-	STEP.pGPIOx = pGPIOA;
-	STEP.GPIO_PinConfig.GPIO_PinMode= GPIO_MODE_ALTF;
-	STEP.GPIO_PinConfig.GPIO_PinAltFunMode = 1;
-	STEP.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP;
-	STEP.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
-	STEP.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
-	STEP.GPIO_PinConfig.GPIO_PinNumber = 5;
+	stepper_1.step_port = pGPIOA;
+	stepper_1.step_pin = 5;
+	stepper_1.step_alt_mode = 1;
+	stepper_1.step_timer_port = pTIM2;
+	stepper_1.step_channel = TIMx_CH1;
+	stepper_1.step_IRQ_number = IRQ_NO_TIM2;
 
-	GPIO_Init(&STEP);
+	stepper_1.dir_port = pGPIOA;
+	stepper_1.dir_pin = 4;
+	stepper_1.dir_alt_mode = 0;
 
-	PWM2.pTIMx = pTIM2;
-	PWM2.TIMx_PinConfig.TIM_Prescaler = 16;
-	PWM2.TIMx_PinConfig.TIM_CountDir = UPWARDS;
-	PWM2.TIMx_PinConfig.TIM_Channel = TIMx_CH1;
-	PWM2.TIMx_PinConfig.TIM_Mode = TIMx_MODE_COMPARE;
-	PWM2.TIMx_PinConfig.TIM_CMP_Mode = TIMx_COMPARE_MODE_PWM1;
-	PWM2.TIMx_PinConfig.TIM_ARR = 1000;
-	PWM2.TIMx_PinConfig.TIM_CCR = 50;
 
-	TIM_Init(&PWM2);
-	TIM_InterruptEnable(&PWM2,ENABLE);
-	TIM_IRQInterruptConfig(IRQ_NO_TIM2,ENABLE);
+	A4988_init(&stepper_1);
+
     /* Loop forever */
 	for(;;){
-
-
+		A4988_move_Step(20,HIGH,timer);
+		for(uint32_t i = 0; i < 100000; i++);
 	}
 }
 
 //void TIM2_IRQHandler(void){
-//    // 1. Clear interrupt flag
+//   // 1. Clear interrupt flag
 //	PWM2.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);  // Clear update interrupt flag
 //    // 2. Update CCR register to change pulse width (duty cycle) or timing
 //	if(status == 1) pulse += 1;
 //	else  pulse -= 1;
 //
-//    if (pulse >= PWM2.pTIMx->ARR){
+//   if (pulse >= PWM2.pTIMx->ARR){
 //
-//    	status *= -1;
+//   	status *= -1;
 //    }
-//    PWM2.pTIMx->CCR1 = pulse;
+//   PWM2.pTIMx->CCR1 = pulse;
 //
 //}

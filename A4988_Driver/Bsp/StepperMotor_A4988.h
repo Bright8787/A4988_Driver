@@ -27,13 +27,13 @@ typedef struct {
 	GPIO_RegDef_t* step_port;
 	uint8_t step_pin;
 	uint8_t step_alt_mode;
-	TIM_RegDef_t* step_timer;
+	TIM_RegDef_t* step_timer_port;
 	uint8_t step_channel;
 	uint8_t step_IRQ_number;
 	GPIO_RegDef_t* dir_port;
 	uint8_t dir_pin;
 	uint8_t dir_alt_mode;
-    uint8_t resolution;
+
 } A4988_config_t;
 
 

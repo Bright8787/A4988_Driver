@@ -220,7 +220,6 @@ void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t ENorDI){
 	/*Configure IRQ number of GPIO
 	 *ISER Interrupt Set-enable Register
 	 * */
-
 	if(ENorDI == ENABLE){
 		if(IRQNumber <= 31){
 			*NVIC_ISER0 |= (1 << IRQNumber);

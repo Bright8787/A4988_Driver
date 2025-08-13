@@ -116,7 +116,7 @@ void TIM_SetCompareModeChannel(TIM_Handle_t *pTIMHandle){
 		//Auto reload pre-load Enable
 		pTIMHandle->pTIMx->CR1  |= (1 << TIM_CR1_ARPE_POS);
 		//Enable Counter
-		// pTIMHandle->pTIMx->CR1  |= (1 << TIM_CR1_CEN_POS);
+//		 pTIMHandle->pTIMx->CR1  |= (1 << TIM_CR1_CEN_POS);
 
 
 }
@@ -175,56 +175,56 @@ void TIMx_EV_IRQHandling(TIM_Handle_t *pTIMHandle){
 		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_UIF);
 	}
 
-	// Compare mode
-
-	// Channel 1 Compare triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC1IF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC1IF_POS);  // Clear update CC1IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC1IF);
-	}
-	// Channel 2 Compare triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC2IF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC2IF_POS);  // Clear update CC2IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC2IF);
-	}
-	// Channel 3 Compare triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC3IF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC3IF_POS);  // Clear update CC3IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC3IF);
-	}
-	// Channel 4 Compare triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC4IF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC4IF_POS);  // Clear update CC14F flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC4IF);
-	}
-	// External Interrupt, triggered when the timer is in slave mode from external source
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_TIF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_TIF_POS);  // Clear update TIF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_TIF);
-	}
-
-	// Capture mode
-
-	// Channel 1 over-capture triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC1OF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC1OF_POS);  // Clear update CC1IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC1OF);
-	}
-	// Channel 2 over-capture triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC2OF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC2OF_POS);  // Clear update CC2IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC2OF);
-	}
-	// Channel 3 over-capture triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC3OF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC3OF_POS);  // Clear update CC3IF flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC3OF);
-	}
-	// Channel 4 over-capture triggered
-	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC4OF_POS )){
-		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC4OF_POS);  // Clear update CC14F flag
-		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC4OF);
-	}
+//	// Compare mode
+//
+//	// Channel 1 Compare triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC1IF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC1IF_POS);  // Clear update CC1IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC1IF);
+//	}
+//	// Channel 2 Compare triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC2IF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC2IF_POS);  // Clear update CC2IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC2IF);
+//	}
+//	// Channel 3 Compare triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC3IF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC3IF_POS);  // Clear update CC3IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC3IF);
+//	}
+//	// Channel 4 Compare triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC4IF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC4IF_POS);  // Clear update CC14F flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_CC4IF);
+//	}
+//	// External Interrupt, triggered when the timer is in slave mode from external source
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_TIF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_TIF_POS);  // Clear update TIF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_EV_TIF);
+//	}
+//
+//	// Capture mode
+//
+//	// Channel 1 over-capture triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC1OF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC1OF_POS);  // Clear update CC1IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC1OF);
+//	}
+//	// Channel 2 over-capture triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC2OF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC2OF_POS);  // Clear update CC2IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC2OF);
+//	}
+//	// Channel 3 over-capture triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC3OF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC3OF_POS);  // Clear update CC3IF flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC3OF);
+//	}
+//	// Channel 4 over-capture triggered
+//	if(pTIMHandle->pTIMx->SR & ( 1 << TIM_SR_CC4OF_POS )){
+//		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_CC4OF_POS);  // Clear update CC14F flag
+//		TIM_ApplicationEventCallback(pTIMHandle,TIMx_ER_CC4OF);
+//	}
 
 }
 
