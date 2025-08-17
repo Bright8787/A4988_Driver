@@ -43,7 +43,7 @@ int main(void)
 	stepper_1.step_IRQ_number = IRQ_NO_TIM2;
 
 	stepper_1.dir_port = pGPIOA;
-	stepper_1.dir_pin = 4;
+	stepper_1.dir_pin = 9;
 	stepper_1.dir_alt_mode = 0;
 
 
@@ -51,8 +51,9 @@ int main(void)
 
     /* Loop forever */
 	for(;;){
-		A4988_move_Step(20,HIGH,timer);
-		for(uint32_t i = 0; i < 100000; i++);
+		for(uint32_t i = 0; i < 1000000; i++);
+		A4988_move_Step(400,HIGH,timer);
+
 	}
 }
 
