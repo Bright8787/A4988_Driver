@@ -46,6 +46,8 @@ void A4988_init(A4988_config_t *A4988_config){
 	A4988_TIM_Config(A4988_config);
 	GPIO_WriteToOutputPin(A4988_config->dir_port,A4988_config->dir_pin,HIGH);
 
+
+	GPIO_WriteToOutputPin(A4988_config->dir_port,A4988_config->dir_pin,HIGH);
 }
 
 static void A4988_GPIO_Config(A4988_config_t *A4988_config){
@@ -84,13 +86,22 @@ static void A4988_TIM_Config(A4988_config_t *A4988_config){
 	memset(&PWMx,0,sizeof(PWMx));
 
 	PWMx.pTIMx = A4988_config->step_timer_port;
+<<<<<<< HEAD
 	PWMx.TIMx_PinConfig.TIM_Prescaler = 20;
+=======
+	PWMx.TIMx_PinConfig.TIM_Prescaler = 8;
+>>>>>>> 5fd8076 (Pulling from Laptop)
 	PWMx.TIMx_PinConfig.TIM_CountDir = UPWARDS;
 	PWMx.TIMx_PinConfig.TIM_Channel = A4988_config->step_channel;;
 	PWMx.TIMx_PinConfig.TIM_Mode = TIMx_MODE_COMPARE;
 	PWMx.TIMx_PinConfig.TIM_CMP_Mode = TIMx_COMPARE_MODE_PWM1;
+<<<<<<< HEAD
 	PWMx.TIMx_PinConfig.TIM_ARR = ARR_VAL; // 1 Period = 1/(16/20MHz) = 1.25 microSecs (to 4000 Tick) -> 4000 * 1.25 microSecs = 5000 microSecs = 5 ms
 	PWMx.TIMx_PinConfig.TIM_CCR = ARR_VAL/2; // Duty Cycle 50%
+=======
+	PWMx.TIMx_PinConfig.TIM_ARR = 10000; // 1 Period = 1/4MHz = 0.25 microSecs -> 1000 * 0.25 microSecs = 250 microSecs
+	PWMx.TIMx_PinConfig.TIM_CCR = 5000; // Duty Cycle 50%
+>>>>>>> 5fd8076 (Pulling from Laptop)
 
 	TIM_Init(&PWMx);
 	TIM_InterruptEnable(&PWMx,ENABLE);
@@ -131,6 +142,7 @@ static inline void set_phase(uint8_t p){
 
 void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle){
 	// Enable Counter and ISR
+<<<<<<< HEAD
 	counter = 1;
 	steps_target = steps;
 	arr = ARR_VAL;
@@ -139,6 +151,13 @@ void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle){
 
 	T = clk_period * ARR_VAL; // First period  should be 5000 microsecs
 	set_phase(0);
+=======
+
+	counter = 0;
+	step = steps;
+	arr = 1000;
+	ccr = 500;
+>>>>>>> 5fd8076 (Pulling from Laptop)
 	pTIMHandle.pTIMx->CR1  |= (1 << TIM_CR1_CEN_POS);
 	while(counter < steps);
 	// Disable Counter
@@ -169,10 +188,27 @@ void TIM5_IRQHandler(void){
 
 void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv){
 	if(AppEv == TIMx_EV_UIF){
+<<<<<<< HEAD
 
 		        counter++;
 		        // --- Decide phase transitions ---
 		        uint32_t remaining = (steps_target > counter) ? (steps_target - counter) : 0;
+=======
+//		Update the frequency of toggling
+//		Update CCR register to change pulse width (duty cycle) or timing
+		counter++;
+//		if(status == 1){
+//			arr -= 10;
+//			// Has to come up with formula to increase or decrease arr
+//		}
+//		else{
+//			arr += 10;
+//		}
+//
+//		if (counter >= step){ // High frequency pulse
+//		    	status *= -1;
+//		}
+>>>>>>> 5fd8076 (Pulling from Laptop)
 
 		        // Simple phase logic (acceleration side)
 		        if (phase == 0 && a >= a_max){ a = a_max; set_phase(1); }

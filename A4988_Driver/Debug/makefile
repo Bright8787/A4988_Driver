@@ -61,8 +61,8 @@ all: main-build
 main-build: A4988_Driver.elf secondary-outputs
 
 # Tool invocations
-A4988_Driver.elf A4988_Driver.map: $(OBJS) $(USER_OBJS) C:\Users\Phuri\STM32CubeIDE\A4988_Stepper\A4988_Driver\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "A4988_Driver.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Phuri\STM32CubeIDE\A4988_Stepper\A4988_Driver\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="A4988_Driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+A4988_Driver.elf A4988_Driver.map: $(OBJS) $(USER_OBJS) /home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "A4988_Driver.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="A4988_Driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
