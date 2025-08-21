@@ -22,8 +22,6 @@
 #include "stddef.h"
 #include "string.h"
 
-
-
 TIM_Handle_t timer;
 
 // 1 = UP and 0 = DOWN
@@ -32,7 +30,7 @@ int main(void)
 
 	timer.pTIMx = pTIM2;
 	A4988_config_t stepper_1;
-	memset(&stepper_1,0,sizeof(stepper_1));
+	memset(&stepper_1, 0, sizeof(stepper_1));
 
 	/*Always initiate clock first before data line*/
 	stepper_1.step_port = pGPIOA;
@@ -46,28 +44,36 @@ int main(void)
 	stepper_1.dir_pin = 9;
 	stepper_1.dir_alt_mode = 0;
 
-
 	A4988_init(&stepper_1);
 
+<<<<<<< HEAD
     /* Loop forever */
 	for(;;){
 		A4988_move_Step(200,HIGH,timer);
 		for(uint32_t i = 0; i < 5000000; i++);
 
+=======
+	/* Loop forever */
+	for (;;)
+	{
+		A4988_move_Step(200, HIGH, timer);
+		for (uint32_t i = 0; i < 1000000; i++)
+			;
+>>>>>>> ca2a40efbedac3a34228162fda1bf2387c592b0c
 	}
 }
 
-//void TIM2_IRQHandler(void){
-//   // 1. Clear interrupt flag
+// void TIM2_IRQHandler(void){
+//    // 1. Clear interrupt flag
 //	PWM2.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);  // Clear update interrupt flag
-//    // 2. Update CCR register to change pulse width (duty cycle) or timing
+//     // 2. Update CCR register to change pulse width (duty cycle) or timing
 //	if(status == 1) pulse += 1;
 //	else  pulse -= 1;
 //
-//   if (pulse >= PWM2.pTIMx->ARR){
+//    if (pulse >= PWM2.pTIMx->ARR){
 //
-//   	status *= -1;
-//    }
-//   PWM2.pTIMx->CCR1 = pulse;
+//    	status *= -1;
+//     }
+//    PWM2.pTIMx->CCR1 = pulse;
 //
-//}
+// }
