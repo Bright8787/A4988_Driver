@@ -51,8 +51,8 @@ int main(void)
 
     /* Loop forever */
 	for(;;){
-		for(uint32_t i = 0; i < 1000000; i++);
-		A4988_move_Step(400,HIGH,timer);
+		A4988_move_Step(200,HIGH,timer);
+		for(uint32_t i = 0; i < 5000000; i++);
 
 	}
 }

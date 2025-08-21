@@ -183,7 +183,7 @@
 #define TIM_CCMR2_OC4PE_POS 11
 
 #define TIM_DIER_UIE_POS 0
-
+#define TIM_EGR_UG_POS 0
 
 /*TIM2 to 5*/
 
@@ -303,7 +303,7 @@ typedef struct{
 
 
 /*Timer Object TIM2 - TIM5*/
-typedef struct {
+volatile typedef struct {
 	volatile uint32_t CR1;
 	volatile uint32_t CR2;
 	volatile uint32_t SMCR;

@@ -103,7 +103,7 @@ void TIM_SetCompareModeChannel(TIM_Handle_t *pTIMHandle){
 			pTIMHandle->pTIMx->CCMR2 |= ( 1 << TIM_CCMR2_OC3PE_POS);
 
 		}
-		else if(pTIMHandle->TIMx_PinConfig.TIM_Channel== TIMx_CH4){
+		else if(pTIMHandle->TIMx_PinConfig.TIM_Channel == TIMx_CH4){
 			// CCR4 = Set DutyCycle. Given the DutyCycle in Percent: (TIM_DutyCycle/100) * ARR
 			pTIMHandle->pTIMx->CCR4 = pTIMHandle->TIMx_PinConfig.TIM_CCR;
 			//Clear TIM_CCMR2_OC4M_POS
