@@ -1,34 +1,26 @@
-13:09:29 **** Build of configuration Debug for project A4988_Driver ****
+15:21:28 **** Build of configuration Debug for project A4988_Driver ****
 make -j16 all 
 arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -c -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32f446retx.d" -MT"Startup/startup_stm32f446retx.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Startup/startup_stm32f446retx.o" "../Startup/startup_stm32f446retx.s"
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscall.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscall.d" -MT"Src/syscall.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/syscall.o"
 arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/sysmem.o"
 arm-none-eabi-gcc "../Driver/src/stm32f446xx_GPIO_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Driver/src/stm32f446xx_GPIO_driver.d" -MT"Driver/src/stm32f446xx_GPIO_driver.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Driver/src/stm32f446xx_GPIO_driver.o"
 arm-none-eabi-gcc "../Driver/src/stm32f446xx_Timer_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Driver/src/stm32f446xx_Timer_driver.d" -MT"Driver/src/stm32f446xx_Timer_driver.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Driver/src/stm32f446xx_Timer_driver.o"
 arm-none-eabi-gcc "../Bsp/StepperMotor_A4988.c" -mcpu=cortex-m4 -std=gnu11 -g3 -c -I"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Bsp/StepperMotor_A4988.d" -MT"Bsp/StepperMotor_A4988.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Bsp/StepperMotor_A4988.o"
+../Bsp/StepperMotor_A4988.c:106:13: warning: 'resetMove' defined but not used [-Wunused-function]
+  106 | static void resetMove(TIM_Handle_t pTIMHandle, uint32_t steps)
+      |             ^~~~~~~~~
 arm-none-eabi-gcc -o "A4988_Driver.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/bright/STM32CubeIDE/my_workspace/StepperMotor_A4988/A4988_Driver/STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="A4988_Driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-closer.o): in function `_close_r':
-(.text._close_r+0xc): warning: _close is not implemented and will always fail
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-closer.o): note: the message above does not take linker garbage collection into account
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-lseekr.o): in function `_lseek_r':
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-lseekr.o): note: the message above does not take linker garbage collection into account
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-readr.o): note: the message above does not take linker garbage collection into account
-(.text._lseek_r+0x10): warning: _lseek is not implemented and will always fail
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-readr.o): in function `_read_r':
-(.text._read_r+0x10): warning: _read is not implemented and will always fail
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-writer.o): in function `_write_r':
-(.text._write_r+0x10): warning: _write is not implemented and will always fail
-/opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld: /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc_nano.a(libc_a-writer.o): note: the message above does not take linker garbage collection into account
 Finished building target: A4988_Driver.elf
  
 arm-none-eabi-size  A4988_Driver.elf 
 arm-none-eabi-objdump -h -S A4988_Driver.elf  > "A4988_Driver.list"
    text	   data	    bss	    dec	    hex	filename
-   5044	     12	   1700	   6756	   1a64	A4988_Driver.elf
+   5696	     16	   1680	   7392	   1ce0	A4988_Driver.elf
 Finished building: default.size.stdout
  
 Finished building: A4988_Driver.list
  
 
-13:09:29 Build Failed. 4 errors, 4 warnings. (took 201ms)
+15:21:29 Build Finished. 0 errors, 1 warnings. (took 254ms)
 

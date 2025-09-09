@@ -54,8 +54,14 @@ int main(void)
 		A4988_move_Step(200, HIGH, timer);
 		for (uint32_t i = 0; i < 1000000; i++)
 			;
-
-
+		//		for (uint32_t i = 0; i < 2500000; i++);
+		A4988_move_Step(10, LOW, timer);
+		for (uint32_t i = 0; i < 2500000; i++)
+			;
+		A4988_move_Step(10, LOW, timer);
+		// A4988_move_Step(150, HIGH, timer);
+		for (uint32_t i = 0; i < 2500000; i++)
+			;
 	}
 }
 

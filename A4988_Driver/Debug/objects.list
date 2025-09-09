@@ -2,5 +2,6 @@
 "./Driver/src/stm32f446xx_GPIO_driver.o"
 "./Driver/src/stm32f446xx_Timer_driver.o"
 "./Src/main.o"
+"./Src/syscall.o"
 "./Src/sysmem.o"
 "./Startup/startup_stm32f446retx.o"
