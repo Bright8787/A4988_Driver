@@ -1,6 +1,6 @@
 ../Driver/src/stm32f446xx_Timer_driver.c:11:6:TIM_Init	16	static
 ../Driver/src/stm32f446xx_Timer_driver.c:38:6:TIM_PeriClockControl	16	static
 ../Driver/src/stm32f446xx_Timer_driver.c:74:6:TIM_SetCompareModeChannel	16	static
-../Driver/src/stm32f446xx_Timer_driver.c:124:6:TIM_InterruptEnable	16	static
-../Driver/src/stm32f446xx_Timer_driver.c:138:6:TIM_IRQInterruptConfig	16	static
-../Driver/src/stm32f446xx_Timer_driver.c:170:6:TIMx_EV_IRQHandling	16	static
+../Driver/src/stm32f446xx_Timer_driver.c:127:6:TIM_InterruptEnable	16	static
+../Driver/src/stm32f446xx_Timer_driver.c:141:6:TIM_IRQInterruptConfig	16	static
+../Driver/src/stm32f446xx_Timer_driver.c:173:6:TIMx_EV_IRQHandling	16	static

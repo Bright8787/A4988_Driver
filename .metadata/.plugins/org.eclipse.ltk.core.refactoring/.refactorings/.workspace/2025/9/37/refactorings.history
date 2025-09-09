@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;A4988_Driver/Debug/A4988_Driver.elf&apos;" deleteContents="false" description="Delete resource &apos;A4988_Driver/Debug/A4988_Driver.elf&apos;" element1="/A4988_Driver/Debug/A4988_Driver.elf" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1757415767040"/>
+</session>

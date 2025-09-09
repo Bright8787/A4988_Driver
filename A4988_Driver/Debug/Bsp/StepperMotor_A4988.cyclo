@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ../Bsp/StepperMotor_A4988.c:40:6:A4988_init	1
 ../Bsp/StepperMotor_A4988.c:50:13:A4988_GPIO_Config	1
 ../Bsp/StepperMotor_A4988.c:80:13:A4988_TIM_Config	1
@@ -35,3 +36,17 @@
 ../Bsp/StepperMotor_A4988.c:141:6:TIM_ApplicationEventCallback	2
 >>>>>>> 5fd8076 (Pulling from Laptop)
 >>>>>>> ca2a40efbedac3a34228162fda1bf2387c592b0c
+=======
+../Bsp/StepperMotor_A4988.c:35:6:A4988_init	1
+../Bsp/StepperMotor_A4988.c:47:13:A4988_GPIO_Config	1
+../Bsp/StepperMotor_A4988.c:75:13:A4988_TIM_Config	1
+../Bsp/StepperMotor_A4988.c:95:13:A4988_TIM_Init	1
+../Bsp/StepperMotor_A4988.c:113:20:set_phase	8
+../Bsp/StepperMotor_A4988.c:145:13:resetMove	1
+../Bsp/StepperMotor_A4988.c:166:6:A4988_move_Step	2
+../Bsp/StepperMotor_A4988.c:187:6:TIM2_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:192:6:TIM3_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:197:6:TIM4_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:202:6:TIM5_IRQHandler	1
+../Bsp/StepperMotor_A4988.c:208:6:TIM_ApplicationEventCallback	2
+>>>>>>> c35cac9 (Pulling from Laptop)

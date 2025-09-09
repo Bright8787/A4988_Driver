@@ -20,13 +20,15 @@
 #include "../Driver/Inc/stm32f446xx.h"
 #include "../Bsp/StepperMotor_A4988.h"
 #include "stddef.h"
+#include <stdio.h>
 #include "string.h"
-
+// extern void initialise_monitor_handles(void);
 TIM_Handle_t timer;
 
 // 1 = UP and 0 = DOWN
 int main(void)
 {
+	//	initialise_monitor_handles();   // <-- enable semihosting
 
 	timer.pTIMx = pTIM2;
 	A4988_config_t stepper_1;
@@ -46,20 +48,20 @@ int main(void)
 
 	A4988_init(&stepper_1);
 
-<<<<<<< HEAD
-    /* Loop forever */
-	for(;;){
-		A4988_move_Step(200,HIGH,timer);
-		for(uint32_t i = 0; i < 5000000; i++);
-
-=======
 	/* Loop forever */
 	for (;;)
 	{
 		A4988_move_Step(200, HIGH, timer);
 		for (uint32_t i = 0; i < 1000000; i++)
 			;
->>>>>>> ca2a40efbedac3a34228162fda1bf2387c592b0c
+		//		for (uint32_t i = 0; i < 2500000; i++);
+		A4988_move_Step(10, LOW, timer);
+		for (uint32_t i = 0; i < 2500000; i++)
+			;
+		A4988_move_Step(10, LOW, timer);
+		// A4988_move_Step(150, HIGH, timer);
+		for (uint32_t i = 0; i < 2500000; i++)
+			;
 	}
 }
 

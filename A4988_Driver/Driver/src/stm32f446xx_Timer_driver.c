@@ -115,6 +115,9 @@ void TIM_SetCompareModeChannel(TIM_Handle_t *pTIMHandle){
 		}
 		//Auto reload pre-load Enable
 		pTIMHandle->pTIMx->CR1  |= (1 << TIM_CR1_ARPE_POS);
+		// Force Timer Update
+
+
 		//Enable Counter
 //		 pTIMHandle->pTIMx->CR1  |= (1 << TIM_CR1_CEN_POS);
 
