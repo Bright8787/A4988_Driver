@@ -8,41 +8,96 @@
 #include "StepperMotor_A4988.h"
 #include "stddef.h"
 #include "string.h"
+#include <math.h>
 
 #define MAX_TIMERS 4
 #define ARR_VAL 8000 // 5000 Good spot
-A4988_config_t *A4988_config_x;
+const float microStepScales[] = {1.0, 1 / 2, 1 / 4, 1 / 8, 1 / 16};
+//A4988_config_t *A4988_config_x;
+static A4988_config_t *device_table[MAX_TIMERS] = {0};
+
 static void A4988_GPIO_Config(A4988_config_t *A4988_config);
 static void A4988_TIM_Config(A4988_config_t *A4988_config);
 static void A4988_TIM_Init();
-static void resetMove(TIM_Handle_t pTIMHandle, uint32_t steps);
-const float clk_period = 1.25e-6f;
-volatile uint32_t arr;
-volatile uint32_t counter = 0;
-// Still have to tune parameter
-volatile uint32_t steps_done = 0, steps_target = 0;
+static float degreeToSteps(float degree, uint8_t microStepMode);
+static float normalize_angle_m180_180(float angle);
 
-volatile float f_current = 100.0f; // current step frequency ARR = 8000
-volatile float f_target = 1000.0f; // target frequency ->   ARR = 800
-volatile float accel = 500.0f;	   // steps/s^2
-volatile float T = clk_period * 8000;
+const float clk_period = 1.25e-6f;
+
+//volatile float f_current = 50.0f;  // current step frequency ARR = 8000
+//volatile float f_target = 1000.0f; // target frequency ->   ARR = 800
+//volatile float accel = 30.0f;	   // steps/s^2
+//volatile float T = clk_period * ARR_VAL;
 
 TIM_Handle_t TIM_handles[MAX_TIMERS];
 
+static float microStepScale(uint8_t microStepMode){
+
+	if(microStepMode == FULLSTEP){
+		return microStepScales[0];
+	}
+	else if(microStepMode == HALFSTEP){
+		return microStepScales[1];
+	}
+	else if(microStepMode == QUARTERSTEP){
+		return microStepScales[2];
+	}
+	else if(microStepMode == EIGTHSTEP){
+		return microStepScales[3];
+	}
+	else if(microStepMode == SIXTEENTHSTEP){
+		return microStepScales[4];
+	}
+
+	return 0.0;
+}
+static float normalize_angle_m180_180(float angle) // In degree
+{
+	angle = fmod(angle + 180.0, 360.0);
+	if (angle < 0)
+		angle += 360.0;
+	return angle - 180.0;
+}
+
+static float degreeToSteps(float degree, uint8_t microStepMode)
+{
+	/*Conversion*/
+	// 360 degree -> 200 Steps * microStep
+	// x   degree -> (x/1.8 Steps) * microStep
+	float normalized_degree = normalize_angle_m180_180(degree); // Range: [−π,π)
+	float steps = normalized_degree / (1.8 * microStepScale(microStepMode))  ;
+
+	return  fabs(steps);
+}
+
 void A4988_init(A4988_config_t *A4988_config)
 {
-	A4988_config_x = A4988_config;
+//	A4988_config_x = A4988_config;
 	// Set address of each timer in TIM_handles array
-
 	A4988_TIM_Init();
 	A4988_GPIO_Config(A4988_config);
 	A4988_TIM_Config(A4988_config);
+
+    for (int i = 0; i < MAX_TIMERS; i++)
+    {
+        if (device_table[i] == NULL)
+        {
+            device_table[i] = A4988_config; // register motor
+            break;
+        }
+    }
+
+    A4988_config->counter = 0;
+    A4988_config->f_current = 50.0f;
+    A4988_config->T = clk_period * ARR_VAL;
+    A4988_config->f_target = 1000.0f;
+    A4988_config->accel = 30.0f;
 }
 
 static void A4988_GPIO_Config(A4988_config_t *A4988_config)
 {
 
-	GPIO_Handle_t step, dir;
+	GPIO_Handle_t dir,step;
 	memset(&dir, 0, sizeof(dir));
 	memset(&step, 0, sizeof(step));
 
@@ -63,7 +118,7 @@ static void A4988_GPIO_Config(A4988_config_t *A4988_config)
 	dir.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	dir.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
 	dir.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP;			// PP for normal usage
-	dir.GPIO_PinConfig.GPIO_PinAltFunMode = A4988_config->dir_alt_mode; // No Alternate Funciton is used
+	dir.GPIO_PinConfig.GPIO_PinAltFunMode = 0; // No Alternate Funciton is used
 	GPIO_Init(&dir);
 }
 
@@ -87,7 +142,7 @@ static void A4988_TIM_Config(A4988_config_t *A4988_config)
 	TIM_IRQInterruptConfig(A4988_config->step_IRQ_number, ENABLE);
 }
 
-static void A4988_TIM_Init()
+static void A4988_TIM_Init(A4988_config_t *A4988_config)
 {
 
 	memset(&TIM_handles[0], 0, sizeof(TIM_Handle_t));
@@ -103,41 +158,38 @@ static void A4988_TIM_Init()
 	TIM_handles[3].pTIMx = pTIM5;
 }
 
-static void resetMove(TIM_Handle_t pTIMHandle, uint32_t steps)
+//void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle)
+void A4988_move_Step(uint32_t steps, uint32_t dir, A4988_config_t *A4988_config_x)
 {
 
-	steps_target = steps;
-	steps_done = 0;
-	T = clk_period;
 
-	pTIMHandle.pTIMx->EGR |= (1 << TIM_EGR_UG_POS);
-	pTIMHandle.pTIMx->CR1 |= (1 << TIM_CR1_UDIS_POS);
-	pTIMHandle.pTIMx->ARR = ARR_VAL;
-	pTIMHandle.pTIMx->CCR1 = (ARR_VAL) / 2;
-	pTIMHandle.pTIMx->CNT = 0;
-	pTIMHandle.pTIMx->CR1 &= ~(1 << TIM_CR1_UDIS_POS);
+	A4988_config_x->counter = 0;
+	A4988_config_x->steps_target = steps;
+	A4988_config_x->f_current = 50.0f;
+	A4988_config_x->T = clk_period * ARR_VAL;
+
+	//Set the rotation direction
+	GPIO_WriteToOutputPin(A4988_config_x->dir_port, A4988_config_x->dir_pin, dir);
+
+	// Reset the counter
+	A4988_config_x->step_timer_port->CR1 &= ~(1 << TIM_CR1_CEN_POS); //
+
+	A4988_config_x->step_timer_port->CR1 |= (1 << TIM_CR1_ARPE_POS);
+	A4988_config_x->step_timer_port->CCMR1 |= (1 << TIM_CCMR1_OC1PE_POS);
+
+	A4988_config_x->step_timer_port->ARR = ARR_VAL - 1;
+	A4988_config_x->step_timer_port->CCR1 = (ARR_VAL - 1) / 2;
+
+	A4988_config_x->step_timer_port->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
+	A4988_config_x->step_timer_port->SR &= ~(1 << TIM_SR_UIF_POS);
+	// Enable Counter
+	A4988_config_x->step_timer_port->CR1 |= (1 << TIM_CR1_CEN_POS);
+
 }
 
-void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle)
+void A4988_move_Degree(uint32_t degree, uint32_t dir, uint8_t microStepMode, A4988_config_t *A4988_config_x)
 {
-
-	counter = 0;
-	steps_target = steps;
-	f_current = 100.0f;
-	// Enable Counter
-	// Reset the counter
-	pTIMHandle.pTIMx->CR1 &= ~(1 << TIM_CR1_CEN_POS); //
-
-	pTIMHandle.pTIMx->CR1 |= (1 << TIM_CR1_ARPE_POS);
-	pTIMHandle.pTIMx->CCMR1 |= (1 << TIM_CCMR1_OC1PE_POS);
-
-	pTIMHandle.pTIMx->ARR = ARR_VAL - 1;
-	pTIMHandle.pTIMx->CCR1 = (ARR_VAL - 1) / 2;
-
-	pTIMHandle.pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
-	pTIMHandle.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);
-
-	pTIMHandle.pTIMx->CR1 |= (1 << TIM_CR1_CEN_POS);
+	A4988_move_Step(degreeToSteps(degree,microStepMode),dir, A4988_config_x);
 }
 
 void TIM2_IRQHandler(void)
@@ -161,37 +213,49 @@ void TIM5_IRQHandler(void)
 	TIMx_EV_IRQHandling(&TIM_handles[3]);
 }
 
+A4988_config_t* findDevice(TIM_Handle_t *pTIMHandle)
+{
+    for (int i = 0; i < MAX_TIMERS; i++)
+    {
+    	if(device_table[i] != NULL){
+
+			if (device_table[i]->step_timer_port == pTIMHandle->pTIMx)
+				return device_table[i]; // found corresponding motor
+    	}
+    }
+    return NULL; // not found
+}
 void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv)
 {
 	if (AppEv == TIMx_EV_UIF)
 	{
-		counter++;
 
+		A4988_config_t *device = findDevice(pTIMHandle);
+		device->counter++;
 		// --- Acceleration ramp ---
-		if (f_current < f_target)
+		if (device->f_current < device->f_target)
 		{
-			f_current += accel * T; // f = f + a*dt
-			if (f_current > f_target)
-				f_current = f_target;
+			device->f_current += device->accel * device->T; // f = f + a*dt
+			if (device->f_current > device->f_target)
+				device->f_current = device->f_target;
 		}
 
 		// Compute new period
-		T = 1.0f / f_current;
-		arr = (uint32_t)(T / clk_period + 0.5f);
-		//
-		// Update timer safely
+		device->T = 1.0f / device->f_current;
+		uint32_t arr = (uint32_t)(device->T / clk_period + 0.5f);
 
+		// Update timer safely
 		pTIMHandle->pTIMx->ARR = arr;
 		pTIMHandle->pTIMx->CCR1 = arr / 2;
 		pTIMHandle->pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
 		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);
 
-		if (counter >= steps_target)
+		if (device->counter >= device->steps_target)
 		{
 
 			pTIMHandle->pTIMx->CR1 &= ~(1 << TIM_CR1_CEN_POS); // Stop timer
-			f_current = 50.0f;
-			T = clk_period * ARR_VAL; // First period  should be 5000 microsecs
+			device->f_current = 50.0f;
+			device->T = clk_period * ARR_VAL; // First period  should be 5000 microsecs
 			pTIMHandle->pTIMx->ARR = ARR_VAL - 1;
 			pTIMHandle->pTIMx->CCR1 = (ARR_VAL - 1) / 2;
 			pTIMHandle->pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself

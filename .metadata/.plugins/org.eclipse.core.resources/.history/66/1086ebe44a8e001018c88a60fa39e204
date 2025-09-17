@@ -1,0 +1,44 @@
+/*
+ * StepperMotor_A4988.h
+ *
+ *  Created on: Aug 2, 2025
+ *      Author: bright
+ */
+
+#ifndef BSP_STEPPERMOTOR_A4988_H_
+#define BSP_STEPPERMOTOR_A4988_H_
+
+
+#include "../Driver/Inc/stm32f446xx.h"
+
+#define HIGH 1
+#define LOW 0
+
+// MicroStepping mode
+#define FULLSTEP 0
+#define HALFSTEP 1
+#define QUARTERSTEP 2
+#define EIGTHSTEP 3
+#define SIXTEENTHSTEP 7
+
+
+/*Stepper object*/
+typedef struct {
+	GPIO_RegDef_t* step_port;
+	uint8_t step_pin;
+	uint8_t step_alt_mode;
+	TIM_RegDef_t* step_timer_port;
+	uint8_t step_channel;
+	uint8_t step_IRQ_number;
+	GPIO_RegDef_t* dir_port;
+	uint8_t dir_pin;
+	uint8_t dir_alt_mode;
+
+} A4988_config_t;
+
+const float microStep[] = {1, 1 / 2, 1 / 4, 1 / 8, 1 / 16};
+const uint8_t microStepMode[] = {FULLSTEP,HALFSTEP,QUARTERSTEP,EIGTHSTEP,SIXTEENTHSTEP};
+void A4988_init(A4988_config_t *A4988_config);
+void A4988_move_Step  (uint32_t steps, uint32_t dir, float microStep, TIM_Handle_t pTIMHandle);
+void A4988_move_Degree(uint32_t degree,uint32_t dir, float microStep, TIM_Handle_t pTIMHandle);
+#endif /* BSP_STEPPERMOTOR_A4988_H_ */

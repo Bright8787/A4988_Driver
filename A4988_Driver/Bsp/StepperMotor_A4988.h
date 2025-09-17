@@ -32,13 +32,19 @@ typedef struct {
 	uint8_t step_IRQ_number;
 	GPIO_RegDef_t* dir_port;
 	uint8_t dir_pin;
-	uint8_t dir_alt_mode;
+    // Runtime state
+    volatile uint32_t counter;
+    volatile uint32_t steps_target;
+    volatile float f_current;
+    volatile float f_target;
+    volatile float accel;
+    volatile float T;
 
 } A4988_config_t;
 
 
+//const uint8_t microStepMode[] = {FULLSTEP,HALFSTEP,QUARTERSTEP,EIGTHSTEP,SIXTEENTHSTEP};
 void A4988_init(A4988_config_t *A4988_config);
-
-void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle);
-void A4988_move_Degree(uint32_t degree,uint32_t dir);
+void A4988_move_Step  (uint32_t steps, uint32_t dir, A4988_config_t *A4988_config_x);
+void A4988_move_Degree(uint32_t degree,uint32_t dir, uint8_t microStep, A4988_config_t *A4988_config_x);
 #endif /* BSP_STEPPERMOTOR_A4988_H_ */

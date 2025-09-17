@@ -3,13 +3,20 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="dir_mode"/>
+		<item value="PWMx"/>
+		<item value="A4988_init"/>
+		<item value="A4988_GPIO_Config"/>
+		<item value="A4988_config_x"/>
+		<item value="A4988_TIM_Config"/>
+		<item value="GPIO"/>
+		<item value="Write"/>
+		<item value="microStepScale"/>
+		<item value="A4988_move_Step"/>
+		<item value="degreeToSteps"/>
+		<item value="microStep"/>
+		<item value="8000"/>
 		<item value="TIMx_CR1_DIR_UPWARDS"/>
 		<item value="TIM"/>
-		<item value="TIM_CountDir"/>
-		<item value="Count"/>
-		<item value="Duty"/>
-		<item value="TIM_ARR"/>
-		<item value="TIM_Mode"/>
-		<item value="HIGH"/>
 	</list>
 </section>

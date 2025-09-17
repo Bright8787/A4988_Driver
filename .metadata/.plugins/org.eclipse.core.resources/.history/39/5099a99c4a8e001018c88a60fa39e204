@@ -1,0 +1,212 @@
+/*
+ * StepperMotor_A4988.c
+ *
+ *  Created on: Aug 2, 2025
+ *      Author: bright
+ */
+
+#include "StepperMotor_A4988.h"
+#include "stddef.h"
+#include "string.h"
+#include <math.h>
+
+#define MAX_TIMERS 4
+#define ARR_VAL 8000 // 5000 Good spot
+A4988_config_t *A4988_config_x;
+
+static void A4988_GPIO_Config(A4988_config_t *A4988_config);
+static void A4988_TIM_Config(A4988_config_t *A4988_config);
+static void A4988_TIM_Init();
+static float degreeToSteps(float degree, float microStep);
+static float normalize_angle_m180_180(float angle);
+
+const float clk_period = 1.25e-6f;
+volatile uint32_t arr;
+volatile uint32_t counter = 0;
+// Still have to tune parameter
+volatile uint32_t steps_done = 0, steps_target = 0;
+
+volatile float f_current = 50.0f;  // current step frequency ARR = 8000
+volatile float f_target = 1000.0f; // target frequency ->   ARR = 800
+volatile float accel = 30.0f;	   // steps/s^2
+volatile float T = clk_period * ARR_VAL;
+
+TIM_Handle_t TIM_handles[MAX_TIMERS];
+
+static float normalize_angle_m180_180(float angle) // In degree
+{
+	angle = fmod(angle + 180.0, 360.0);
+	if (angle < 0)
+		angle += 360.0;
+	return angle - 180.0;
+}
+
+static float degreeToSteps(float degree, float microStep)
+{
+	/*Conversion*/
+	// 360 degree -> 200 Steps * microStep
+	// x   degree -> (x/1.8 Steps) * microStep
+	float normalized_degree = normalize_angle_m180_180(degree); // Range: [−π,π)
+	float steps = (normalized_degree / 1.8) * microStep;
+
+	return  fabs(steps);
+}
+
+void A4988_init(A4988_config_t *A4988_config)
+{
+	A4988_config_x = A4988_config;
+	// Set address of each timer in TIM_handles array
+	A4988_TIM_Init();
+	A4988_GPIO_Config(A4988_config);
+	A4988_TIM_Config(A4988_config);
+}
+
+static void A4988_GPIO_Config(A4988_config_t *A4988_config)
+{
+
+	GPIO_Handle_t step, dir;
+	memset(&dir, 0, sizeof(dir));
+	memset(&step, 0, sizeof(step));
+
+	// Set up Step Port
+	step.pGPIOx = A4988_config->step_port;
+	step.GPIO_PinConfig.GPIO_PinNumber = A4988_config->step_pin;
+	step.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTF;
+	step.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	step.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
+	step.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP;			  // PP for normal usage
+	step.GPIO_PinConfig.GPIO_PinAltFunMode = A4988_config->step_alt_mode; // No Alternate Funciton is used
+	GPIO_Init(&step);
+
+	// Set up dir Port
+	dir.pGPIOx = A4988_config->dir_port;
+	dir.GPIO_PinConfig.GPIO_PinNumber = A4988_config->dir_pin;
+	dir.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
+	dir.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	dir.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NO_PUPD;
+	dir.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PP;			// PP for normal usage
+	dir.GPIO_PinConfig.GPIO_PinAltFunMode = A4988_config->dir_alt_mode; // No Alternate Funciton is used
+	GPIO_Init(&dir);
+}
+
+static void A4988_TIM_Config(A4988_config_t *A4988_config)
+{
+
+	TIM_Handle_t PWMx;
+	memset(&PWMx, 0, sizeof(PWMx));
+
+	PWMx.pTIMx = A4988_config->step_timer_port;
+	PWMx.TIMx_PinConfig.TIM_Prescaler = 20;
+	PWMx.TIMx_PinConfig.TIM_CountDir = UPWARDS;
+	PWMx.TIMx_PinConfig.TIM_Channel = A4988_config->step_channel;
+	PWMx.TIMx_PinConfig.TIM_Mode = TIMx_MODE_COMPARE;
+	PWMx.TIMx_PinConfig.TIM_CMP_Mode = TIMx_COMPARE_MODE_PWM1;
+	PWMx.TIMx_PinConfig.TIM_ARR = ARR_VAL;	   // 1 Period = 1/4MHz = 0.25 microSecs -> 1000 * 0.25 microSecs = 250 microSecs
+	PWMx.TIMx_PinConfig.TIM_CCR = ARR_VAL / 2; // Duty Cycle 50%
+
+	TIM_Init(&PWMx);
+	TIM_InterruptEnable(&PWMx, ENABLE);
+	TIM_IRQInterruptConfig(A4988_config->step_IRQ_number, ENABLE);
+}
+
+static void A4988_TIM_Init()
+{
+
+	memset(&TIM_handles[0], 0, sizeof(TIM_Handle_t));
+	TIM_handles[0].pTIMx = pTIM2;
+
+	memset(&TIM_handles[1], 0, sizeof(TIM_Handle_t));
+	TIM_handles[1].pTIMx = pTIM3;
+
+	memset(&TIM_handles[2], 0, sizeof(TIM_Handle_t));
+	TIM_handles[2].pTIMx = pTIM4;
+
+	memset(&TIM_handles[3], 0, sizeof(TIM_Handle_t));
+	TIM_handles[3].pTIMx = pTIM5;
+}
+
+void A4988_move_Step(uint32_t steps, uint32_t dir, TIM_Handle_t pTIMHandle)
+{
+
+	counter = 0;
+	steps_target = steps;
+	f_current = 50.0f;
+
+	// Reset the counter
+	pTIMHandle.pTIMx->CR1 &= ~(1 << TIM_CR1_CEN_POS); //
+
+	pTIMHandle.pTIMx->CR1 |= (1 << TIM_CR1_ARPE_POS);
+	pTIMHandle.pTIMx->CCMR1 |= (1 << TIM_CCMR1_OC1PE_POS);
+
+	pTIMHandle.pTIMx->ARR = ARR_VAL - 1;
+	pTIMHandle.pTIMx->CCR1 = (ARR_VAL - 1) / 2;
+
+	pTIMHandle.pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
+	pTIMHandle.pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);
+	// Enable Counter
+	pTIMHandle.pTIMx->CR1 |= (1 << TIM_CR1_CEN_POS);
+}
+
+void A4988_move_Degree(uint32_t degree, uint32_t dir, TIM_Handle_t pTIMHandle)
+{
+	A4988_move_Step(degreeToSteps(degree,microStep);
+
+}
+
+void TIM2_IRQHandler(void)
+{
+	TIMx_EV_IRQHandling(&TIM_handles[0]);
+}
+
+void TIM3_IRQHandler(void)
+{
+	TIMx_EV_IRQHandling(&TIM_handles[1]);
+}
+
+void TIM4_IRQHandler(void)
+{
+	TIMx_EV_IRQHandling(&TIM_handles[2]);
+}
+
+void TIM5_IRQHandler(void)
+{
+
+	TIMx_EV_IRQHandling(&TIM_handles[3]);
+}
+
+void TIM_ApplicationEventCallback(TIM_Handle_t *pTIMHandle, uint8_t AppEv)
+{
+	if (AppEv == TIMx_EV_UIF)
+	{
+		counter++;
+		// --- Acceleration ramp ---
+		if (f_current < f_target)
+		{
+			f_current += accel * T; // f = f + a*dt
+			if (f_current > f_target)
+				f_current = f_target;
+		}
+
+		// Compute new period
+		T = 1.0f / f_current;
+		arr = (uint32_t)(T / clk_period + 0.5f);
+
+		// Update timer safely
+		pTIMHandle->pTIMx->ARR = arr;
+		pTIMHandle->pTIMx->CCR1 = arr / 2;
+		pTIMHandle->pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
+		pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);
+
+		if (counter >= steps_target)
+		{
+
+			pTIMHandle->pTIMx->CR1 &= ~(1 << TIM_CR1_CEN_POS); // Stop timer
+			f_current = 50.0f;
+			T = clk_period * ARR_VAL; // First period  should be 5000 microsecs
+			pTIMHandle->pTIMx->ARR = ARR_VAL - 1;
+			pTIMHandle->pTIMx->CCR1 = (ARR_VAL - 1) / 2;
+			pTIMHandle->pTIMx->EGR |= (1 << TIM_EGR_UG_POS); // Generate Event by itself
+			pTIMHandle->pTIMx->SR &= ~(1 << TIM_SR_UIF_POS);
+		}
+	}
+}
